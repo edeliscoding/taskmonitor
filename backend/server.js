@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const authRoute = require("./routes/auth");
 const taskRoute = require("./routes/task");
+const secureRoute = require("./routes/secure");
 
 const port = process.env.PORT || 3001;
 
@@ -16,7 +17,11 @@ app.use(express.json());
 
 //DB connection
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+});
 const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database conenction established successfuly");
@@ -25,5 +30,6 @@ connection.once("open", () => {
 // Route Middleware
 app.use("/api/user", authRoute);
 app.use("/api/task", taskRoute);
+app.use("/api/secure", secureRoute);
 
 app.listen(port, () => console.log(`server up and running on port: ${port}`));

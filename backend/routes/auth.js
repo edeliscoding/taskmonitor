@@ -26,39 +26,13 @@ router.post("/register", async (req, res) => {
 
   try {
     const savedUser = await user.save();
-    res.send({ user: user._id });
+    res.status(201).json({ message: "User created", userId: user._id });
+    // res.send({ user: user._id });
     //probably redirect to dashboard page
   } catch (err) {
     console.log(err);
   }
 });
-
-// //validation
-// const Joi = require("@hapi/joi");
-
-// const schema = Joi.object({
-//   email: Joi.string.min(6).required().email,
-//   password: Joi.string()
-//     .min(6)
-//     .required()
-// });
-
-// router.post("/register", async (req, res) => {
-//   //Let's validate
-//   const validation = schema.validate(req.body, schema);
-//   res.send(validation);
-
-//   // const user = new User({
-//   //   email: req.body.email,
-//   //   password: req.body.password
-//   // });
-//   // try {
-//   //   const savedUser = await user.save();
-//   //   res.send(savedUser);
-//   // } catch (err) {
-//   //   res.status(400).send(err);
-//   // }
-// });
 
 //login
 router.post("/login", async (req, res) => {
@@ -74,9 +48,16 @@ router.post("/login", async (req, res) => {
 
   //create and assign a token
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-  res.header("auth-token", token).send(token);
+  res.header("auth-token", token); //append send(token) after ).
+  res.status(200).json({ token: token, userId: user._id.toString() });
 
-  res.json({ msg: "LOGGEDIN" });
+  // res.json({ isLoggedIn: true });
+  // console.log(token);
+  // res.redirect("/");
+  // res.redirect("/");
+  // res.redirect("/api/dashboard");
+  // return res.redirect("/");
+  // res.json({ msg: "LOGGEDIN" });
 });
 
 module.exports = router;

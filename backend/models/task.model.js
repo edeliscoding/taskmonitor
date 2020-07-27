@@ -24,6 +24,10 @@ const Schema = mongoose.Schema;
 const TaskSchema = new Schema({
   tasks: [{}],
   additional: String,
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
   date: {
     type: Date,
     default: Date.now

@@ -4,7 +4,7 @@ import axios from "axios";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-export const App = () => {
+export const Apporiginal = () => {
   const [inputFields, setInputFields] = useState([
     { firstName: "", lastName: "" }
   ]);
@@ -47,12 +47,17 @@ export const App = () => {
 
     const task = {
       tasks: [inputFields],
-      comment: secondary
+      additional: secondary
     };
-    // console.log(task);
+    console.log(task);
     axios
       .post("http://localhost:3001/api/task/add", task)
-      .then(res => console.log(res.data));
+      // .then(response => console.log(response.data));
+      .then(res => {
+        if (res.data.status === 201) {
+          this.props.history.push("../pages/dashboard");
+        }
+      });
   };
 
   return (

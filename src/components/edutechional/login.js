@@ -25,21 +25,13 @@ export default class Login extends Component {
     const { email, password } = this.state;
 
     axios
-      .post(
-        "http://localhost:3001/api/user/login",
-        {
-          // user: {
-          //   email: email,
-          //   password: password
-          // }
-          email: email,
-          password: password
-        }
-        // ,
-        // { withCredentials: true }
-      )
+      .post("http://localhost:3001/api/user/login", {
+        email: email,
+        password: password
+      })
       .then(response => {
         console.log(response);
+
         // if(response.data.)
         // const token = response.header("auth-token");
         // if (token) {

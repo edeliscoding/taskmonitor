@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Task = require("../models/task.model");
+const verify = require("./verifyToken");
+const User = require("../models/user.model");
 
 router.post("/add", async (req, res) => {
   //dataTasks and comment work it prints the following
@@ -24,29 +26,50 @@ router.post("/add", async (req, res) => {
   //   console.log(task);
   // });
 
-  const task = new Task({
-    additional: req.body.comment.secondary,
-    tasks: req.body.tasks
-  });
+  // let creator;
+  //   const task = new Task({
+  //     // additional: req.body.comment.secondary,
+  //     additional: req.body.additional,
+  //     tasks: req.body.tasks,
+  //     creator: req.user
+  //   });
 
-  try {
-    const savedTask = await task.save();
-    res.send(savedTask);
-  } catch (err) {
-    res.status(402).send(err);
-  }
-
-  // const task = new Task({
-  //   taskname: req.body.myArray.firstName,
-  //   taskcomment: req.body.myArray.lastName,
-  //   taskadditional: req.body.myObject.additional
+  //   try {
+  //     const savedTask = await task.save();
+  //     res.send(savedTask);
+  //     const currentUser = User.findById(req.user);
+  //     // creator = currentUser;
+  //     currentUser.tasks.push(task);
+  //     // const savedUser = await
+  //   } catch (err) {
+  //     res.status(402).send(err);
+  //   }
   // });
-  // try {
-  //   const savedTask = await task.save();
-  //   res.send(savedTask);
-  // } catch (err) {
-  //   res.status(400).send(err);
-  // }
-});
+  let creator;
 
+  const task = new Task({
+    // additional: req.body.comment.secondary,
+    additional: req.body.additional.secondary,
+    tasks: req.body.tasks,
+    creator: req.user
+  });
+  //  creator: req.user
+  task
+    .save()
+    .then(result => {
+      return User.findById(req.user);
+    })
+    .then(user => {
+      creator = user;
+      user.tasks.push(task);
+      return user.save();
+    })
+    .then(result => {
+      res.status(201).json({
+        message: "Post created successfully",
+        task: task,
+        creator: { _id: creator._id, name: creator.email }
+      });
+    });
+});
 module.exports = router;

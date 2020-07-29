@@ -1,8 +1,9 @@
 import React, { useState, Fragment, Component } from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-
 import "bootstrap/dist/css/bootstrap.css";
+
+const { uuid } = require("uuidv4");
 
 export const Apporiginal = () => {
   const [inputFields, setInputFields] = useState([
@@ -35,18 +36,20 @@ export const Apporiginal = () => {
   };
 
   const handleSecondaryChange = event => {
-    const values = { ...secondary };
+    // const values = { ...secondary };
+    // const values = secondary;
+    let values;
     if (event.target.name === "comments") {
-      values.secondary = event.target.value;
+      values = event.target.value;
     }
     setSecondary(values);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-
+    setInputFields([{ ...inputFields, id: uuid() }]);
     const task = {
-      tasks: [inputFields],
+      tasks: inputFields,
       additional: secondary
     };
     console.log(task);
@@ -55,7 +58,7 @@ export const Apporiginal = () => {
       // .then(response => console.log(response.data));
       .then(res => {
         if (res.data.status === 201) {
-          this.props.history.push("../pages/dashboard");
+          this.props.history.push("/");
         }
       });
   };
@@ -135,7 +138,7 @@ export const Apporiginal = () => {
             type="text"
             className="form-control"
             name="comments"
-            value={secondary.secondComments}
+            value={secondary}
             onChange={event => handleSecondaryChange(event)}
           />
         </div>

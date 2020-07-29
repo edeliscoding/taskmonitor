@@ -49,7 +49,7 @@ router.post("/add", async (req, res) => {
 
   const task = new Task({
     // additional: req.body.comment.secondary,
-    additional: req.body.additional.secondary,
+    additional: req.body.additional,
     tasks: req.body.tasks,
     creator: req.user
   });

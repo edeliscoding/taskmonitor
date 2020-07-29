@@ -8,6 +8,7 @@ const authRoute = require("./routes/auth");
 const taskRoute = require("./routes/task");
 const updateTaskRoute = require("./routes/TaskRoute");
 const deleteTaskRoute = require("./routes/TaskRoute");
+const getTaskRoute = require("./routes/TaskRoute");
 
 const secureRoute = require("./routes/secure");
 const dashboardRoute = require("./routes/dashboard");
@@ -37,5 +38,6 @@ app.use("/api/secure", secureRoute);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/task", updateTaskRoute);
 app.use("/api/task", deleteTaskRoute);
+app.use("/api/task", getTaskRoute);
 
 app.listen(port, () => console.log(`server up and running on port: ${port}`));

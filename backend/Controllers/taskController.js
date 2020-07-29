@@ -46,3 +46,18 @@ exports.deleteTask = async (req, res) => {
     });
   }
 };
+
+exports.getTask = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: { task }
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err
+    });
+  }
+};

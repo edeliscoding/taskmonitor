@@ -88,6 +88,13 @@ export default class Tasklist extends Component {
       .then(response => console.log(response));
     this.setState({ tasks: this.state.tasks.filter(task => task._id !== id) });
   };
+
+  // removeTask = () => {
+  //   this.setState(prevState => {
+  //     const tasks = prevState.tasks.filter(task => task.name !== taskToDelete);
+  //     return { tasks };
+  //   });
+  // };
   render() {
     const tasksall = this.state.tasks.map((task, index) => {
       // let first;
@@ -103,23 +110,26 @@ export default class Tasklist extends Component {
       // last = task.lastName;
 
       return (
-        <Taskitem
-          updateTask2={event => {
-            this.OnUpdateTask(event);
-          }}
-          // fNameIndex={this.state.tasks[index].firstName}
-          // lNameIndex={this.state.tasks[index].lastName}
-          tasksArray={task.tasks}
-          fname={first_fname}
-          lname={first_lname}
-          // onUserNameChangeHandler={this.onUserNameChangeHandler}
-          // taskFirstName={this.state.first}
-          // taskLastName={this.state.last}
-          comment={task.additional}
-          updateTask={this.updateTask}
-          id={task._id}
-          handleremoveTask={this.handleremoveTask}
-        />
+        <div className="container-fluid">
+          <Taskitem
+            updateTask2={event => {
+              this.OnUpdateTask(event);
+            }}
+            // fNameIndex={this.state.tasks[index].firstName}
+            // lNameIndex={this.state.tasks[index].lastName}
+            tasksArray={task.tasks}
+            fname={first_fname}
+            lname={first_lname}
+            // onUserNameChangeHandler={this.onUserNameChangeHandler}
+            // taskFirstName={this.state.first}
+            // taskLastName={this.state.last}
+            comment={task.additional}
+            updateTask={this.updateTask}
+            id={task._id}
+            handleremoveTask={this.handleremoveTask}
+            // key={task.id}
+          />
+        </div>
       );
     });
 

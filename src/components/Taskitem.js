@@ -10,7 +10,14 @@ export default class Taskitem extends Component {
     comment: this.props.lname,
     additional: this.props.comment,
     tasksArray: this.props.tasksArray,
-    taskid: this.props.id
+    taskid: this.props.id,
+    componentUpdate: false
+  };
+
+  closeButton = () => {
+    this.setState({
+      isEditing: false
+    });
   };
 
   toggleForm = () => {
@@ -53,9 +60,25 @@ export default class Taskitem extends Component {
     this.setState({ isEditing: false });
   };
 
+  // componentupdate = () => {
+  //   this.setState({
+  //     componentUpdate: !this.state.componentUpdate
+  //   });
+  // };
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.componentUpdate !== prevState.componentUpdate) {
+  //     this.setState({
+  //       isEditing: false,
+  //       task: this.state.task,
+  //       comment: this.state.comment,
+  //       addtional: this.state.addtional
+  //     });
+  //   }
+  // }
+
   updateTask = e => {
     e.preventDefault();
-    console.log(e);
 
     const taskToUpdate = {
       tasks: [
@@ -71,11 +94,27 @@ export default class Taskitem extends Component {
       "http://localhost:3001/api/task/" + this.state.taskid,
       taskToUpdate
     );
+    this.setState({
+      isEditing: false
+    });
   };
+
+  handleEdit = event => {
+    Axios.get("https://localhost:3001/api/task/" + event.target.id).then(
+      response => {
+        this.setState({
+          tasks: response.data,
+          additional: response.data.additional
+        });
+      }
+    );
+  };
+
   //this.props.match.params.id
   render() {
     let result;
     if (this.state.isEditing) {
+      // this.handleEdit();
       // });
       result = (
         <div class="container">
@@ -110,14 +149,27 @@ export default class Taskitem extends Component {
                   value={this.state.comment}
                   // value={last}
                   onChange={this.handleCommentChange}
+
                   // value={inputField.lastName}
                   // onChange={event => handleInputChange(index, event)}
                 />
               </div>
-              <div className="form-group col-sm-2">
-                <button className="btn btn-success">Save</button>
+              <div className="form-group d-flex col-sm-2">
+                <button
+                  onClick={this.componentupdate}
+                  className="btn btn-sm btn-success"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={this.closeButton}
+                  className="btn btn-sm btn-info"
+                >
+                  Close
+                </button>
               </div>
             </div>
+
             <h5>
               2. Please add anything else that you would like to share. (Enter
               N/A if not applicable)
@@ -140,12 +192,66 @@ export default class Taskitem extends Component {
       );
     } else {
       result = (
-        <div>
-          <li>
+        <div class="card mb-3">
+          <li className="list-group-item">
             {this.props.tasksArray.map(task => {
               return (
-                <div>
-                  <p>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    class="form-control input-lg"
+                    placeholder={task.firstName}
+                    aria-label="Task name"
+                    aria-describedby="basic-addon2"
+                    readOnly
+                  ></input>
+                  <div class="input-group-append">
+                    {/* <button
+                      onClick={this.toggleForm}
+                      className="btn btn-outline-secondary"
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() =>
+                        this.props.handleremoveTask(this.state.taskid)
+                      }
+                      class="btn btn-outline-secondary"
+                      type="button"
+                    >
+                      Delete
+                    </button> */}
+                  </div>
+                  <div className="mb-5"></div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder={task.lastName}
+                    aria-label="Comment name"
+                    aria-describedby="basic-addon2"
+                    readOnly
+                  ></input>
+                  <div class="input-group-append">
+                    <button
+                      onClick={this.toggleForm}
+                      className="btn btn-outline-secondary"
+                      type="button"
+                      id={this.taskid}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() =>
+                        this.props.handleremoveTask(this.state.taskid)
+                      }
+                      class="btn btn-primary"
+                      type="button"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  {/* <p>
                     {task.firstName} --- {task.lastName}
                     <span>
                       <button onClick={this.toggleForm}>Edit</button>
@@ -159,14 +265,14 @@ export default class Taskitem extends Component {
                         Delete
                       </button>
                     </span>
-                  </p>
+                  </p> */}
                 </div>
               );
             })}
             {/* {this.props.taskFirstName}&nbsp;{this.props.taskLastName}
             {this.state.task}&nbsp;{this.state.comment} */}
           </li>
-          <p>{this.state.additional}</p>
+          <div className="card-footer">{this.state.additional}</div>
         </div>
       );
     }

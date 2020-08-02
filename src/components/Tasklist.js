@@ -14,26 +14,10 @@ export default class Tasklist extends Component {
     this.updateTask = this.updateTask.bind(this);
   }
 
-  // onUserNameChangeHandler = firstName => {
-  //   this.setState(prevState => {
-  //     prevState.tasks.tasks[0].firstName = firstName;
-  //     return { ...prevState };
-  //   });
-  // };
-
-  // onUserNameChangeHandler = firstName => {
-  //   this.setState(prevState => {
-  //    {...prevState.tasks.tasks[0].firstName = firstName}
-  //    return
-  //   })
-
+  // removeItemArray = (index) => {
+  // const updatedTask = this.state.tasks.filter(p => p.tasks[index] !== )
+  // return
   // }
-
-  // onUserNameChangeHandler = firstName => {
-  //   this.setState(prevState => {
-  //     prevState.comment = firstName;
-  //   });
-  // };
 
   OnUpdateTask = (event, index) => {
     const tasks = this.state.tasks;
@@ -82,6 +66,7 @@ export default class Tasklist extends Component {
     this.setState({ tasks: updatedProject, comment: additional });
   }
 
+  // problem with this is it removes the whole thing and not an item inside the array
   handleremoveTask = id => {
     axios
       .delete("http://localhost:3001/api/task/" + id)
@@ -102,10 +87,10 @@ export default class Tasklist extends Component {
       const fname = task.tasks.map(t => t.firstName);
       const lname = task.tasks.map(t => t.lastName);
 
-      const first_fname = fname[0];
-      const first_lname = lname[0];
-
-      console.log(first_fname);
+      // const first_fname = fname[0];
+      // const first_lname = lname[0];
+      console.log(fname);
+      // console.log(first_fname);
       // first = task.firstName;
       // last = task.lastName;
 
@@ -118,8 +103,8 @@ export default class Tasklist extends Component {
             // fNameIndex={this.state.tasks[index].firstName}
             // lNameIndex={this.state.tasks[index].lastName}
             tasksArray={task.tasks}
-            fname={first_fname}
-            lname={first_lname}
+            // fname={first_fname}
+            // lname={first_lname}
             // onUserNameChangeHandler={this.onUserNameChangeHandler}
             // taskFirstName={this.state.first}
             // taskLastName={this.state.last}
@@ -127,6 +112,7 @@ export default class Tasklist extends Component {
             updateTask={this.updateTask}
             id={task._id}
             handleremoveTask={this.handleremoveTask}
+            key={index}
             // key={task.id}
           />
         </div>
@@ -137,7 +123,7 @@ export default class Tasklist extends Component {
       <div>
         <h1>Tasks Lists</h1>
         <ul>{tasksall}</ul>
-        <p>{this.state.comment}</p>
+        {/* <p>{this.state.comment}</p> */}
       </div>
     );
   }
